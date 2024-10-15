@@ -37,6 +37,7 @@ This will generate two outputs:
 
 ### GIS Visualization
 An interactive map is generated as 'anomaly_map.html'. Open this file in a web browser to explore the spatial distribution of data points and anomalies.
+![Map Visualization](Map_Output.png)
 
 ## Code Structure
 
