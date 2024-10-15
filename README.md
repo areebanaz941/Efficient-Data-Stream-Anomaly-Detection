@@ -1,84 +1,61 @@
-# Data Stream Anomaly Detection with GIS Visualization
+# Efficient Data Stream Anomaly Detection
 
-This project implements an efficient algorithm for detecting anomalies in a continuous data stream, with an added GIS (Geographic Information System) visualization component.
+## Project Overview
+This project focuses on developing a Python script for detecting anomalies in a continuous data stream. The data stream simulates real-time sequences of floating-point numbers, representing various metrics such as financial transactions or system metrics. In real-time, the goal is to identify unusual patterns, such as exceptionally high values or deviations from the norm.
 
-## Features
+## Algorithm Selection
+For this project, we have chosen the z-score-based anomaly detection algorithm. The z-score, also known as the standard score, measures how many standard deviations an observation is from the mean of a dataset. By calculating the z-score for each data point in a sliding window, we can identify anomalies based on a predefined threshold.
 
-- Real-time anomaly detection using Z-score method
-- Data stream simulation with trend, seasonal components, and random anomalies
-- GIS visualization of data points and detected anomalies
-- Interactive map output using Folium
-- Time series visualization using Matplotlib
-## Algorithm Explanation
+The z-score-based algorithm is simple, intuitive, and computationally efficient, making it suitable for real-time anomaly detection. It can adapt to concept drift and seasonal variations by continuously updating the sliding window and recalculating the mean and standard deviation.
 
-This project uses the Z-score method for anomaly detection. Here's a concise explanation of the algorithm and its effectiveness:
+## Data Stream Simulation
+We have designed a function called `generate_real_time_data_stream()` to simulate a data stream. This function generates data points at regular intervals, incorporating the following components:
+- Trend: A gradual increase or decrease in the data over time.
+- Seasonality: Periodic patterns that repeat at fixed intervals.
+- Noise: Random fluctuations added to the data.
+- Anomalies: Occasional exceptionally high or low values that deviate significantly from the norm.
 
-### Z-score Method
+The function uses mathematical equations and random number generation to create a realistic data stream.
 
-The Z-score method is a statistical technique for identifying outliers in a dataset. It works by measuring how many standard deviations away a data point is from the mean.
+## Anomaly Detection
+The anomaly detection mechanism is implemented in the `AnomalyDetector` class. It maintains a sliding window of data points and calculates the z-score for each new data point. If the absolute value of the z-score exceeds a specified threshold, the data point is considered an anomaly.
 
-Algorithm steps:
-1. Maintain a sliding window of recent data points.
-2. For each new data point:
-   a. Calculate the mean and standard deviation of the data in the window.
-   b. Compute the Z-score: Z = (X - μ) / σ
-      Where X is the new data point, μ is the mean, and σ is the standard deviation.
-   c. If |Z| > threshold (typically 3), flag the point as an anomaly.
-3. Update the sliding window with the new point.
+The `is_anomaly()` method of the `AnomalyDetector` class performs anomaly detection in real-time as the data is streamed. It continuously updates the sliding window and checks for anomalies based on the z-score threshold.
 
-### Effectiveness
+## Optimization
+To ensure optimal performance, we have implemented the following optimizations:
+- The sliding window is implemented using a `deque` (double-ended queue) from the `collections` module, which allows efficient insertion and deletion of elements at both ends.
+- The z-score calculation is performed using the `zscore()` function from the `scipy.stats` module, which is optimized for performance.
+- The anomaly detection is performed only for new data points, avoiding redundant calculations.
 
-The Z-score method is effective for anomaly detection due to several factors:
+## Visualization
+We have created a real-time visualization tool to display the data stream and detect anomalies. The visualization consists of two components:
+1. Data Stream Plot: A line plot that shows the data points over time, with anomalies marked in red.
+2. Interactive Map: A geographic map that displays the locations of the data points, with anomalies highlighted using markers.
 
-1. **Adaptability**: By using a sliding window, the algorithm adapts to gradual changes in the data distribution, making it suitable for detecting anomalies in non-stationary time series.
+The visualization is implemented using the Matplotlib and Folium libraries. The data stream plot is updated in real time as new data points arrive, and the interactive map is saved as an HTML file for each batch of data points.
 
-2. **Simplicity**: The algorithm is straightforward to implement and computationally efficient, allowing for real-time processing of data streams.
+## Results
+Here are some examples of the visualizations generated by the project:
 
-3. **Interpretability**: Z-scores provide a clear, interpretable measure of how unusual a data point is relative to recent observations.
+1. Data Stream Plot:
+![Data Stream Plot](data_stream_plot.png)
 
-4. **Sensitivity to Outliers**: The method is particularly good at detecting sudden spikes or drops in the data, which are often of interest in anomaly detection scenarios.
+2. Interactive Map:
+![Interactive Map](interactive_map.png)
 
-5. **Scale-Invariance**: Z-scores are scale-invariant, meaning the method works well regardless of the scale of the input data.
-   
-## Requirements
+The data stream plot effectively visualizes the data points over time, with anomalies marked in red. The interactive map provides a spatial representation of the data points and highlights the locations of anomalies.
 
-To install the required packages, run:
+## Conclusion
+The developed Python script successfully detects anomalies in a continuous data stream using the z-score-based algorithm. The algorithm is optimized for speed and efficiency, and the real-time visualization tool provides clear insights into the data stream and detected anomalies.
 
-```
-pip install -r requirements.txt
-```
+The project fulfills the objectives of algorithm selection, data stream simulation, anomaly detection, optimization, and visualization. The code is well-documented, and error handling and data validation are implemented to ensure robustness.
 
-## Usage
+The z-score-based algorithm proves to be effective for detecting anomalies in this scenario, adapting to concept drift and seasonal variations. However, it may have limitations in handling more complex patterns or non-normal distributions. In such cases, alternative algorithms like Isolation Forest, Local Outlier Factor (LOF), or DBSCAN clustering can be explored.
 
-Run the main script:
+Overall, this project demonstrates the successful implementation of an efficient data stream anomaly detection system using Python.
 
-```
-python anomaly_detection.py
-```
-
-This will generate two outputs:
-1. A Matplotlib plot showing the data stream and detected anomalies over time.
-2. An interactive HTML map ('anomaly_map.html') showing the spatial distribution of data points and anomalies.
-
-## Example Output
-
-### Time Series Visualization
-![Time Series Plot](Output.png)
-
-### GIS Visualization
-An interactive map is generated as 'anomaly_map.html'. Open this file in a web browser to explore the spatial distribution of data points and anomalies.
-![Map Visualization](Map_Output.png)
-
-## Code Structure
-
-- `AnomalyDetector`: Class implementing the anomaly detection algorithm
-- `generate_data_stream`: Function to simulate a data stream
-- `generate_spatial_data`: Function to generate random spatial coordinates
-- `visualize_stream`: Function to create the time series plot
-- `visualize_gis`: Function to create the interactive GIS map
-
-## Future Improvements
-
-- Implement more sophisticated anomaly detection algorithms (e.g., ARIMA, Isolation Forests)
-- Add real-time updating capabilities to the GIS visualization
-- Incorporate actual geographic data for more realistic simulations
+## Files
+- `anomaly_detection.py`: The main Python script containing the anomaly detection algorithm, data stream simulation, and visualization.
+- `README.md`: Project documentation and explanation.
+- `requirements.txt`: List of external libraries required to run the project.
